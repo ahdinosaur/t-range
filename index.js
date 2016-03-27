@@ -1,27 +1,37 @@
 var t = require('tcomb')
 
-module.exports = Range
+module.exports = refineNumberInRange
 
-function refineRange (min, max) {
-  var Range = t.refinement(
+function refineNumberInRange (options) {
+  var min = options.min || 0
+  var max = options.max || 100
+  var step = options.step || 1
+
+  var NumberInRange = t.refinement(
     t.Number,
     function (n) { return n >= min && n <= max },
-    'Range between ' + min + ' and ' + max + ' (exclusive)'
+    'NumberInRange between ' + min + ' and ' + max + ' (exclusive)'
   )
 
-  Range.view = function viewRange (options) {
+  NumberInRange.view = function viewRange (options) {
     var h = options.h
-    var update = options.update
 
-    return h('input', {
-      type: 'range',
-      min,
-      max,
-      oninput: function (evt) {
-        update({ $set: Number(evt.target.value) })
+    return function (props) {
+      var onUpdate = props.onUpdate
+      var value = props.value || (min + (max - min) / 2)
+
+      return h('input', {
+        type: 'range',
+        value: value,
+        min: min, max: max, step: step,
+        oninput: onInput
+      })
+
+      function onInput (evt) {
+        onUpdate(Number(evt.target.value))
       }
-    })
+    }
   }
 
-  return Range
+  return NumberInRange
 }
