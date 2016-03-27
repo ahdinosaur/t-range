@@ -1,11 +1,12 @@
 var t = require('tcomb')
+var defined = require('defined')
 
 module.exports = refineNumberInRange
 
 function refineNumberInRange (options) {
-  var min = options.min || 0
-  var max = options.max || 100
-  var step = options.step || 1
+  var min = defined(options.min, 0)
+  var max = defined(options.max, 100)
+  var step = defined(options.step, 1)
 
   var NumberInRange = t.refinement(
     t.Number,
@@ -17,18 +18,29 @@ function refineNumberInRange (options) {
     var h = options.h
 
     return function (props) {
-      var onUpdate = props.onUpdate
-      var value = props.value || (min + (max - min) / 2)
+      var value = defined(props.value, min + (max - min) / 2)
 
-      return h('input', {
-        type: 'range',
-        value: value,
-        min: min, max: max, step: step,
-        oninput: onInput
-      })
+      return h('div', {
+        className: 'inputs'
+      }, [
+        h('input', {
+          className: 'number',
+          type: 'number',
+          value: value,
+          min: min, max: max, step: step,
+          onchange: onUpdate
+        }),
+        h('input', {
+          className: 'range',
+          type: 'range',
+          value: value,
+          min: min, max: max, step: step,
+          oninput: onUpdate
+        })
+      ])
 
-      function onInput (evt) {
-        onUpdate(Number(evt.target.value))
+      function onUpdate (evt) {
+        props.onUpdate(Number(evt.target.value))
       }
     }
   }
