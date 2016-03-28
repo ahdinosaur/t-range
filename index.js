@@ -14,34 +14,30 @@ function refineNumberInRange (options) {
     'NumberInRange between ' + min + ' and ' + max + ' (exclusive)'
   )
 
-  NumberInRange.view = function viewRange (options) {
-    var h = options.h
+  NumberInRange.view = function viewRange (h, props) {
+    var value = defined(props.value, min + (max - min) / 2)
 
-    return function (props) {
-      var value = defined(props.value, min + (max - min) / 2)
+    return h('div', {
+      className: 'inputs'
+    }, [
+      h('input', {
+        className: 'number',
+        type: 'number',
+        value: value,
+        min: min, max: max, step: step,
+        onchange: onUpdate
+      }),
+      h('input', {
+        className: 'range',
+        type: 'range',
+        value: value,
+        min: min, max: max, step: step,
+        oninput: onUpdate
+      })
+    ])
 
-      return h('div', {
-        className: 'inputs'
-      }, [
-        h('input', {
-          className: 'number',
-          type: 'number',
-          value: value,
-          min: min, max: max, step: step,
-          onchange: onUpdate
-        }),
-        h('input', {
-          className: 'range',
-          type: 'range',
-          value: value,
-          min: min, max: max, step: step,
-          oninput: onUpdate
-        })
-      ])
-
-      function onUpdate (evt) {
-        props.onUpdate(Number(evt.target.value))
-      }
+    function onUpdate (evt) {
+      props.onUpdate(Number(evt.target.value))
     }
   }
 

@@ -42,6 +42,6 @@
   "dependencies": {
     "defined": "^1.0.0",
     "tcomb": "^3.0.0",
-    "tcomb-view": "^3.0.0"
+    "tcomb-view": "^4.0.0"
   }
 }
