@@ -1,17 +1,16 @@
 var vdom = require('virtual-dom')
 var h = require('virtual-dom/h')
 var loop = require('virtual-raf')
-var View = require('tcomb-view')
+var view = require('tcomb-view')
 var refineNumberInRange = require('../')
 
 var NumberInRange = refineNumberInRange({
   min: 0, max: 100, step: 0.1
 })
 
-var view = View({ type: NumberInRange, h: h })
-
 var tree
 var props = {
+  type: NumberInRange,
   value: null,
   onUpdate: function (value) {
     console.log('value', value)
@@ -20,6 +19,6 @@ var props = {
     )
   }
 }
-tree = loop(props, view, vdom)
+tree = loop(props, view(h), vdom)
 
 document.querySelector('main').appendChild(tree.render())
