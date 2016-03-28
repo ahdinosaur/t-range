@@ -1,7 +1,7 @@
 {
   "name": "t-range",
-  "version": "0.0.0",
-  "description": "tcomb type for number between max and min",
+  "version": "1.0.0",
+  "description": "tcomb type for number in range between max and min",
   "main": "index.js",
   "scripts": {
     "test": "tape test.js",
